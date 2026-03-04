@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types'
 import { ADULTS, CHILD } from '../data.js'
 
 export default function Header({ visible, setVisible, showChild, setShowChild }) {
   return (
-    <div style={{
+    <header style={{
       background: 'linear-gradient(90deg, #c8860a, #e8a020, #c8860a)',
       padding: '20px 32px',
       display: 'flex',
@@ -21,11 +22,13 @@ export default function Header({ visible, setVisible, showChild, setShowChild })
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }} role="group" aria-label="Selecionar membros da família">
         {ADULTS.map(a => (
           <button
             key={a.key}
             onClick={() => setVisible(v => ({ ...v, [a.key]: !v[a.key] }))}
+            aria-pressed={visible[a.key]}
+            aria-label={`Mostrar/Ocultar refeições de ${a.label}`}
             style={{
               padding: '8px 14px', borderRadius: 20,
               border: `2px solid ${a.color}`, cursor: 'pointer',
@@ -39,6 +42,8 @@ export default function Header({ visible, setVisible, showChild, setShowChild })
         ))}
         <button
           onClick={() => setShowChild(v => !v)}
+          aria-pressed={showChild}
+          aria-label={`Mostrar/Ocultar refeições de ${CHILD.label}`}
           style={{
             padding: '8px 14px', borderRadius: 20,
             border: `2px solid ${CHILD.color}`, cursor: 'pointer',
@@ -50,6 +55,13 @@ export default function Header({ visible, setVisible, showChild, setShowChild })
           {CHILD.emoji} {CHILD.label}
         </button>
       </div>
-    </div>
+    </header>
   )
+}
+
+Header.propTypes = {
+  visible: PropTypes.shape({}).isRequired,
+  setVisible: PropTypes.func.isRequired,
+  showChild: PropTypes.bool.isRequired,
+  setShowChild: PropTypes.func.isRequired,
 }
